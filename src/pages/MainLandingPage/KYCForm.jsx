@@ -266,4 +266,3 @@ const KYCForm = () => {
 };
 
 export default KYCForm;
-export default KYCForm;
