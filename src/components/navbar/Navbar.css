@@ -1,0 +1,54 @@
+.navbar {
+    position: absolute;
+    width: 1440px;
+    height: 120px;
+    top: 0;
+    left: 0;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 50px rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 80px;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.logo-img {
+    width: 56px;  /* Adjust based on your logo */
+    height: 40px;
+}
+
+.bank-name-heading {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 32px;
+    letter-spacing: 0.1px;
+    color: #3E3A37;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 40px;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links a {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    text-decoration: none;
+    color: #2A2A2A;
+}
+
+.login-icon {
+    width: 160px;  /* Adjust based on your login icon */
+    height: 60px;
+    cursor: pointer;
+}
