@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./KYCForm.css";
 
 const KYCForm = () => {
-  // State for text/select fields
+  // State for text and select fields
   const [formData, setFormData] = useState({
     name: "",
     fatherName: "",
@@ -20,8 +20,10 @@ const KYCForm = () => {
     email: "",
   });
 
-  // State for file uploads (3 required document fields)
+  // State for file uploads: passportPhoto is always mandatory;
+  // among aadhaarCard, panCard, and passport, at least 2 are required.
   const [files, setFiles] = useState({
+    passportPhoto: null,
     aadhaarCard: null,
     panCard: null,
     passport: null,
@@ -30,7 +32,7 @@ const KYCForm = () => {
   const [error, setError] = useState("");
   const [uploadResult, setUploadResult] = useState(null);
 
-  // Handle text and select input changes
+  // Handle text and select field changes
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prevData) => {
@@ -55,8 +57,12 @@ const KYCForm = () => {
     }));
   };
 
-  // Validate that at least 2 of the 3 document files have been uploaded.
+  // Validate that passportPhoto is uploaded,
+  // and at least 2 out of the 3 documents (aadhaarCard, panCard, passport) are provided.
   const validateFiles = () => {
+    if (!files.passportPhoto) {
+      return false;
+    }
     let count = 0;
     if (files.aadhaarCard) count++;
     if (files.panCard) count++;
@@ -64,7 +70,7 @@ const KYCForm = () => {
     return count >= 2;
   };
 
-  // Submission handler
+  // Form submission handler
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -95,21 +101,24 @@ const KYCForm = () => {
 
     // Validate file uploads
     if (!validateFiles()) {
-      setError("Please upload at least 2 documents (Aadhaar Card, PAN Card, Passport).");
+      setError(
+        "Please upload a Passport Size Photograph and at least 2 documents (Aadhaar Card, PAN Card, Passport)."
+      );
       return;
     }
 
-    // Prepare form data including files
+    // Prepare FormData with text fields and file uploads
     const submissionData = new FormData();
     for (const key in formData) {
       submissionData.append(key, formData[key]);
     }
-    submissionData.append("aadhaarCard", files.aadhaarCard);
-    submissionData.append("panCard", files.panCard);
-    submissionData.append("passport", files.passport);
+    submissionData.append("passportPhoto", files.passportPhoto);
+    submissionData.append("aadhaarCard", files.aadhaarCard || "");
+    submissionData.append("panCard", files.panCard || "");
+    submissionData.append("passport", files.passport || "");
 
     try {
-      // Make a POST request to your backend endpoint
+      // Send a POST request to the backend endpoint that processes and uploads files.
       const response = await fetch("http://127.0.0.1:5000/upload_kyc_documents", {
         method: "POST",
         body: submissionData,
@@ -129,7 +138,7 @@ const KYCForm = () => {
     <div className="kyc-form-container">
       <h1>KYC Form</h1>
       <form onSubmit={handleSubmit}>
-        {/* Text Fields */}
+        {/* Mandatory Text Fields */}
         <div className="form-group">
           <label>
             Name <span className="required">*</span>
@@ -228,7 +237,22 @@ const KYCForm = () => {
         </div>
 
         {/* File Uploads */}
-        <h2>Upload Documents (At least 2 out of 3 required)</h2>
+        <h2>Upload Documents</h2>
+
+        <div className="form-group">
+          <label>
+            Passport Size Photograph <span className="required">*</span>
+          </label>
+          <input
+            type="file"
+            name="passportPhoto"
+            onChange={handleFileChange}
+            accept="image/*,application/pdf"
+            required
+          />
+        </div>
+
+        <h3>Other Documents (At least 2 out of 3 required)</h3>
 
         <div className="form-group">
           <label>
