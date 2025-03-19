@@ -5,15 +5,11 @@
     text-align: center;
   }
   
-  .video-kyc-container h1 {
-    margin-bottom: 20px;
-  }
-  
   .video-kyc-container button {
     padding: 10px 20px;
     font-size: 16px;
     background-color: #1a1a1a;
-    color: white;
+    color: #fff;
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -21,6 +17,7 @@
   
   .video-kyc-container button:disabled {
     background-color: #555;
+    cursor: not-allowed;
   }
   
   .error {

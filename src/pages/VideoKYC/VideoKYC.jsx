@@ -2,22 +2,26 @@ import React, { useState } from "react";
 import "./VideoKYC.css";
 
 const VideoKYC = () => {
-  // State variables for storing result, loading status, and any error messages.
+  // State to store the server response, loading status, and error messages
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Function that triggers the video KYC process.
+  // Function to initiate the Video KYC by calling the Flask `/detect` endpoint
   const startVideoKYC = async () => {
     setLoading(true);
     setError(null);
+    setResult(null);
+
     try {
-      // Make a GET request to your Flask endpoint.
-      const response = await fetch("http://localhost:5174/detect");
+      // IMPORTANT: Make sure this URL and port match where your Flask server is running
+      // Typically Flask runs at http://127.0.0.1:5000 unless you configured otherwise
+      const response = await fetch("http://127.0.0.1:5000/detect"); 
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-      // Parse the JSON response.
+
+      // Parse JSON response from Flask
       const data = await response.json();
       setResult(data);
     } catch (err) {
@@ -33,7 +37,11 @@ const VideoKYC = () => {
       <button onClick={startVideoKYC} disabled={loading}>
         {loading ? "Processing..." : "Start Video KYC"}
       </button>
+
+      {/* Display any errors */}
       {error && <div className="error">Error: {error}</div>}
+
+      {/* Display the extracted data (if any) */}
       {result && (
         <div className="result">
           <h2>Detected Document Details</h2>
